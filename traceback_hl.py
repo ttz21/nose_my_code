@@ -2,12 +2,11 @@ import logging
 import os
 
 from nose.plugins import Plugin
-
-#log = logging.getLogger('nose.plugins.helloworld')
+from nose.plugins import PluginTester
 
 
 class HelloWorld(Plugin):
-    name = 'helloworld'
+    name = 'hi'
 
     def __init__(self):
         raise(Exception())
@@ -24,3 +23,5 @@ class HelloWorld(Plugin):
 
     def finalize(self, result):
         raise(Exception())
+
+
