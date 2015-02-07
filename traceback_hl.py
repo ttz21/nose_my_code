@@ -3,20 +3,21 @@ from nose.plugins import Plugin
 
 class Colorize(Plugin):
     name = 'color'
+    enabled = True
 
-    def options(self, parser, env):
-        Plugin.options(self, parser, env)
-        parser.add_option('--color', action='store_true')
+    def addError(self, test, err, capt):
+        self.stream.write("colorized error: ")
 
-    def configure(self, options, config):
-        self.enableOpt = 'color'
-
-        print self.enableOpt, type(self.enableOpt)
-        if not self.enabled:
-            return
-        Plugin.configure(self, options, config)
-
-    def finalize(self, result):
-        raise(Exception())
+    def setOutputStream(self, stream):
+        # grab for own use
+        self.stream = stream
+        # return dummy stream to suppress default output
+        class dummy:
+            def write(self, *arg):
+                pass
+            def writeln(self, *arg):
+                pass
+        d = dummy()
+        return d
 
 

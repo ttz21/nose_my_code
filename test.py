@@ -17,7 +17,7 @@ def calc():
 
 class TestHelloWorld(nose.plugins.PluginTester, unittest.TestCase):
 
-    activate = '--color'
+#    activate = '--color'
     plugins = [Colorize()]
 
     def makeSuite(self):
