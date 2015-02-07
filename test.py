@@ -15,14 +15,17 @@ def calc():
     collections.OrderedDict('awef')
 
 
-class TestHelloWorld(PluginTester, Plugin):
-    activate = '--hi'
+class TestHelloWorld(nose.plugins.PluginTester, unittest.TestCase):
+    activate = '--hello'
     plugins = [HelloWorld()]
+
+    def makeSuite(self):
+        return unittest.TestSuite()
 
     def test_basic(self):
         try:
             calc()
-        except Exception as __:
+        except Exception:
             traceback = sys.exc_traceback
             frame = traceback.tb_frame
             import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
