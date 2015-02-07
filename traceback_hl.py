@@ -1,18 +1,15 @@
 from nose.plugins import Plugin
 
 
-class HelloWorld(Plugin):
-    name = 'hello'
-
-    def __init__(self):
-        pass
+class Colorize(Plugin):
+    name = 'color'
 
     def options(self, parser, env):
         Plugin.options(self, parser, env)
-        parser.add_option('--hello', action='store_true')
+        parser.add_option('--color', action='store_true')
 
     def configure(self, options, config):
-        self.enableOpt = 'hello'
+        self.enableOpt = 'color'
 
         print self.enableOpt, type(self.enableOpt)
         if not self.enabled:
