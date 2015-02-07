@@ -6,13 +6,22 @@ run with:
 import unittest
 import collections
 import sys
+import os
 import traceback
 from termcolor import colored
 
 
+PATHS = os.listdir(os.getcwd())
+
 def calc():
     collections.OrderedDict('awef')
 
+
+def is_in_paths(frame):
+    for p in PATHS:
+        if p in frame:
+            return True
+    return False
 
 class ColorizeResult(unittest.TextTestResult):
 
@@ -22,7 +31,7 @@ class ColorizeResult(unittest.TextTestResult):
 
         out = []
         for frame in frames:
-            if 'test.py' in frame:
+            if is_in_paths(frame):
                 out.append(colored(frame, 'green'))
             else:
                 out.append(frame)
