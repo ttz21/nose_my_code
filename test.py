@@ -20,12 +20,14 @@ class ColorizeResult(unittest.TextTestResult):
         msgLines = super(ColorizeResult, self)._exc_info_to_string(err, test)
         frames = msgLines.split('\n')
 
-        msgLines = [
-            colored(frame, 'green')
-            for frame in frames
-            if 'test.py' in frame
-        ]
-        return ''.join(msgLines)
+        out = []
+        for frame in frames:
+            if 'test.py' in frame:
+                out.append(colored(frame, 'green'))
+            else:
+                out.append(frame)
+
+        return '\n'.join(out)
 
 
 class ColorizeRunner(unittest.TextTestRunner):
@@ -53,3 +55,4 @@ class TestHelloWorld(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.TestProgram(testRunner=ColorizeRunner)
+    #unittest.main()
