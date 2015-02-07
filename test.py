@@ -8,7 +8,7 @@ import collections
 import sys
 import nose
 
-from traceback_hl import Colorize
+from my_code.traceback_hl import Colorize
 
 
 def calc():
