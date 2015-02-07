@@ -6,22 +6,33 @@ run with:
 import unittest
 import collections
 import sys
-import nose
-
-from traceback_hl import Colorize
+import traceback
+from termcolor import colored
 
 
 def calc():
     collections.OrderedDict('awef')
 
 
-class TestHelloWorld(nose.plugins.PluginTester, unittest.TestCase):
+class ColorizeResult(unittest.TextTestResult):
 
-    activate = '--color'
-    plugins = [Colorize()]
+    def _exc_info_to_string(self, err, test):
+        msgLines = super(ColorizeResult, self)._exc_info_to_string(err, test)
+        frames = msgLines.split('\n')
 
-    def makeSuite(self):
-        return unittest.TestSuite()
+        msgLines = [
+            colored(frame, 'green')
+            for frame in frames
+            if 'test.py' in frame
+        ]
+        return ''.join(msgLines)
+
+
+class ColorizeRunner(unittest.TextTestRunner):
+    resultclass = ColorizeResult
+
+
+class TestHelloWorld(unittest.TestCase):
 
     def test_basic(self):
         try:
@@ -34,7 +45,11 @@ class TestHelloWorld(nose.plugins.PluginTester, unittest.TestCase):
             code = frame.f_code
             self.assertTrue(hasattr(code, 'co_filename'))
 
+    def test_simple(self):
+        calc()
+
+
 
 
 if __name__ == '__main__':
-    nose.main(addplugins=[Colorize()])
+    unittest.TestProgram(testRunner=ColorizeRunner)
