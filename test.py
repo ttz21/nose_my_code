@@ -7,7 +7,6 @@ import unittest
 import collections
 import sys
 import os
-import traceback
 from termcolor import colored
 
 
@@ -22,6 +21,7 @@ def is_in_paths(frame):
         if p in frame:
             return True
     return False
+
 
 class ColorizeResult(unittest.TextTestResult):
 
