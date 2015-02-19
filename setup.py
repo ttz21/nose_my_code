@@ -11,14 +11,14 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 packages = [
-    'my_code'
+    'mycode'
 ]
 
 requires = []
 
 setup(
     name='Nose My Code',
-    version='0.0.1',
+    version='0.0.2',
     description='Produces a colour coded nose stack trace',
     author='Hansel Dunlop, Jarek Dziedzic, Greg , Tina Zhang',
     author_email='aychedee@github.com, jarekdziedzic@github.com, arachnegl@github.com, ttz21@github.com',
@@ -30,7 +30,7 @@ setup(
     zip_safe=False,
     entry_points = {
         'nose.plugins.0.10': [
-            'colorize = my_code.traceback_hl:Colorize'
+            'mycode = mycode:MyCode'
             ]
     }
 )

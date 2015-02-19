@@ -1,40 +1,20 @@
-"""
-run with:
-    nosetests test.py
-
-"""
-import unittest
-import collections
-import sys
 import nose
+import unittest
 
-from my_code.traceback_hl import Colorize
+from mycode import MyCode
+
+from collections import OrderedDict
 
 
-def calc():
-    collections.OrderedDict('awef')
+def ouch():
+    OrderedDict('ouch')
 
 
-class TestHelloWorld(nose.plugins.PluginTester, unittest.TestCase):
+class MyCodeTest(unittest.TestCase):
 
-    activate = '--color'
-    plugins = [Colorize()]
-
-    def makeSuite(self):
-        return unittest.TestSuite()
-
-    def test_basic(self):
-        try:
-            calc()
-        except Exception:
-            traceback = sys.exc_traceback
-            frame = traceback.tb_frame
-            self.assertTrue(hasattr(frame, 'f_lineno'))
-            self.assertTrue(hasattr(frame, 'f_code'))
-            code = frame.f_code
-            self.assertTrue(hasattr(code, 'co_filename'))
-
+    def test_output_is_highlighted(self):
+        ouch()
 
 
 if __name__ == '__main__':
-    nose.main(addplugins=[Colorize()])
+    nose.main(addplugins=[MyCode()])
