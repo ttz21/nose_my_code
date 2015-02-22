@@ -62,11 +62,5 @@ class MyCode(Plugin):
     enabled = False
     score = 999
 
-    def options(self, parser, env):
-        super(MyCode, self).options(parser, env=env)
-
-    def configure(self, options, conf):
-        super(MyCode, self).configure(options, conf)
-
     def setOutputStream(self, stream):
         return HighlightedStream(stream)
