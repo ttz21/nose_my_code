@@ -1,28 +1,50 @@
 from nose.plugins import Plugin
 import os
 
-bold = '\033[1m{0}\033[0m'
-red = "\033[01;31m{0}\033[00m"
-green = "\033[1;36m{0}\033[00m"
-blue = "\033[1;34m{0}\033[00m"
+_bold = lambda a_str: '\x1b[1m{0}\x1b[0m'.format(a_str)
+_red =  lambda a_str: "\x1b[1;31m{0}\x1b[0m".format(a_str)
+_blue = lambda a_str: "\x1b[1;34m{0}\x1b[0m".format(a_str)
+
+
+def highlight_traceback(traceback, cwd):
+    lines = traceback.split('\n')
+
+    # embolden traceback line
+    intro_idx = 0
+    lines[intro_idx] = _bold(lines[intro_idx])
+
+    # higlight mycode
+    skip_next = False
+    for i in range(1, len(lines[:-2])):
+        if skip_next:
+            skip_next = False
+            continue
+        curr, next_ = i, i + 1  # assumption: err lines always pair
+        line = lines[curr]
+        if cwd in line:
+            lines[curr] = _blue(lines[curr])
+            lines[next_] = _blue(lines[next_])
+            skip_next = True
+
+    # red error mesage
+    err_idx = -2
+    lines[err_idx] = _red(lines[err_idx])
+
+    return '\n'.join(lines)
 
 
 class HighlightedStream(object):
 
     def __init__(self, stream):
         self.stream = stream
-        self.current_path = os.getcwd()
-        self.highlight_next = False
-
-    def highlight(self, line):
-        if self.current_path in line or self.highlight_next:
-            self.highlight_next = not self.highlight_next
-            return blue.format(line)
-        return line
+        self.cwd = os.getcwd()
 
     def write(self, msg):
-        self.stream.write(
-            '\n'.join([self.highlight(line) for line in msg.split('\n')]))
+        if msg.startswith('Traceback'):
+            msg = highlight_traceback(msg, self.cwd)
+            self.stream.write(msg)
+        else:
+            self.stream.write(msg)
 
     def writeln(self, arg=None):
         if arg:
@@ -40,12 +62,6 @@ class MyCode(Plugin):
     name = 'mycode'
     enabled = False
     score = 999
-
-    def options(self, parser, env):
-        super(MyCode, self).options(parser, env=env)
-
-    def configure(self, options, conf):
-        super(MyCode, self).configure(options, conf)
 
     def setOutputStream(self, stream):
         return HighlightedStream(stream)
