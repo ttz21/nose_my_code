@@ -1,6 +1,8 @@
 from nose.plugins import Plugin
 import os
 
+__version__ = '0.0.3'
+
 _bold = lambda a_str: '\x1b[1m{0}\x1b[0m'.format(a_str)
 _red =  lambda a_str: "\x1b[1;31m{0}\x1b[0m".format(a_str)
 _blue = lambda a_str: "\x1b[1;34m{0}\x1b[0m".format(a_str)
